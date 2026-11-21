@@ -1,379 +1,129 @@
-
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FBVideoDown - ফ্রি ভিডিও ডাউনলোডার</title>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FBVideoDown - Free Online Video Downloader</title>
+    <link id="dynamic-favicon" rel="icon" type="image/png" href="">
+    <script>
+        (function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            
+            ctx.fillStyle = '#f5d061';
+            ctx.beginPath();
+            ctx.roundRect(0, 0, 64, 64, 14);
+            ctx.fill();
+            
+            ctx.strokeStyle = '#111111';
+            ctx.lineWidth = 6;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.beginPath();
+            ctx.moveTo(32, 14);
+            ctx.lineTo(32, 40);
+            ctx.moveTo(21, 29);
+            ctx.lineTo(32, 40);
+            ctx.lineTo(43, 29);
+            ctx.moveTo(16, 49);
+            ctx.lineTo(48, 49);
+            ctx.stroke();
+            
+            document.getElementById('dynamic-favicon').href = canvas.toDataURL('image/png');
+        })();
+    </script>
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Hind Siliguri', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #121212; color: #ffffff; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
+        
+        /* নেভিগেশন বার ও লোগো */
+        header { background: #141414; padding: 14px 5%; border-bottom: 1px solid #262626; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        .logo { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 700; color: #f5d061; text-decoration: none; letter-spacing: 0.3px; }
+        .logo span { color: #ffffff; }
+        .logo-icon { width: 32px; height: 32px; flex-shrink: 0; background: linear-gradient(135deg, #f5d061 0%, #c59b27 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(245, 208, 97, 0.3); }
+        
+        /* উপরের নামের ব্যাজ */
+        .dev-badge { background: #1f1c14; border: 1px solid #4a3f1f; color: #cccccc; padding: 5px 12px; border-radius: 20px; font-size: 12px; white-space: nowrap; }
+        .dev-badge strong { color: #f5d061; font-weight: 600; }
 
-        :root {
-            --gold: #d4af37;
-            --gold-light: #f7df98;
-            --gold-dark: #8c6b18;
-            --black: #080808;
-            --surface: #111111;
-            --surface2: #171717;
-            --text: #f5f0e6;
-            --muted: #aaa49a;
-        }
+        /* হিরো সেকশন */
+        .hero { background: radial-gradient(circle at top center, #33270d 0%, #121212 75%); padding: 50px 16px 35px; text-align: center; }
+        .hero h1 { font-size: 34px; margin-bottom: 10px; font-weight: 700; color: #f5d061; line-height: 1.25; }
+        .hero p { font-size: 15px; color: #cccccc; margin-bottom: 28px; max-width: 500px; margin-left: auto; margin-right: auto; }
 
-        body {
-            background:
-                radial-gradient(ellipse at top, #211a0d 0%, #080808 48%, #050505 100%);
-            color: var(--text);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+        /* ইনপুট বক্স ও বাটন */
+        .search-box { background: #1e1e1e; max-width: 660px; margin: 0 auto; padding: 8px; border-radius: 12px; border: 1px solid #3a321d; display: flex; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .search-box input { flex: 1; border: none; outline: none; padding: 12px 14px; font-size: 16px; color: #ffffff; background: transparent; min-width: 0; }
+        .search-box input::placeholder { color: #777777; font-size: 14px; }
+        .btn-actions { display: flex; align-items: center; gap: 8px; }
+        .paste-btn { background: #2c2c2c; color: #ffffff; border: 1px solid #3d3d3d; padding: 11px 15px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; white-space: nowrap; }
+        .paste-btn:hover { background: #383838; }
+        .download-btn { background: linear-gradient(135deg, #e5c158 0%, #c59b27 100%); color: #111111; border: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; white-space: nowrap; }
+        .download-btn:hover { filter: brightness(1.1); }
 
-        /* NAVIGATION */
-        header {
-            background: rgba(10, 10, 10, 0.88);
-            backdrop-filter: blur(15px);
-            padding: 15px 5%;
-            border-bottom: 1px solid rgba(212,175,55,0.25);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-        }
+        /* রেজাল্ট ও লোডিং সেকশন */
+        #result-area { max-width: 660px; margin: 20px auto; padding: 0 16px; text-align: center; width: 100%; }
+        .loader { border: 4px solid #2a2a2a; border-top: 4px solid #f5d061; border-radius: 50%; width: 36px; height: 36px; animation: spin 1s linear infinite; margin: 12px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .result-card { background: #1a1a1a; border: 1px solid #2e2e2e; padding: 22px 16px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+        .final-dl-btn { display: inline-block; width: 100%; max-width: 300px; background: #28a745; color: #ffffff; text-decoration: none; padding: 14px 20px; border-radius: 8px; font-size: 16px; font-weight: 600; margin-top: 12px; transition: 0.3s; }
+        .final-dl-btn:hover { background: #218838; }
 
-        .logo {
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--gold);
-            text-decoration: none;
-            text-shadow: 0 0 15px rgba(212,175,55,0.2);
-        }
+        /* ফিচার কার্ড সেকশন */
+        .features { max-width: 960px; margin: 25px auto 40px; padding: 0 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; width: 100%; }
+        .feature-card { background: #181818; border: 1px solid #262626; padding: 20px 18px; border-radius: 12px; text-align: center; }
+        .feature-card h3 { color: #f5d061; margin-bottom: 8px; font-size: 17px; }
+        .feature-card p { font-size: 13.5px; color: #aaaaaa; line-height: 1.5; }
 
-        .logo span {
-            color: #f5f0e6;
-        }
+        footer { margin-top: auto; background: #0f0f0f; border-top: 1px solid #222222; color: #888888; text-align: center; padding: 16px 12px; font-size: 12.5px; line-height: 1.6; }
+        footer strong { color: #f5d061; font-weight: 600; }
 
-        /* HERO SECTION */
-        .hero {
-            background:
-                radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.15), transparent 65%),
-                linear-gradient(145deg, #18130a 0%, #080808 50%, #12100a 100%);
-            color: white;
-            padding: 70px 20px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: "";
-            position: absolute;
-            width: 350px;
-            height: 350px;
-            border: 1px solid rgba(212,175,55,0.07);
-            border-radius: 50%;
-            top: -180px;
-            left: -120px;
-            box-shadow:
-                0 0 80px rgba(212,175,55,0.04),
-                inset 0 0 80px rgba(212,175,55,0.03);
-        }
-
-        .hero::after {
-            content: "";
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border: 1px solid rgba(212,175,55,0.07);
-            border-radius: 50%;
-            bottom: -180px;
-            right: -100px;
-        }
-
-        .hero h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-            font-weight: 700;
-            color: var(--gold-light);
-            text-shadow: 0 4px 25px rgba(212,175,55,0.2);
-        }
-
-        .hero p {
-            font-size: 16px;
-            color: #bdb6a6;
-            margin-bottom: 30px;
-        }
-
-        /* 3D SEARCH BOX */
-        .search-box {
-            background: linear-gradient(145deg, #1e1e1e, #0b0b0b);
-            max-width: 650px;
-            margin: 0 auto;
-            padding: 8px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            border: 1px solid rgba(212,175,55,0.45);
-            box-shadow:
-                0 15px 35px rgba(0,0,0,0.55),
-                0 0 18px rgba(212,175,55,0.08),
-                inset 0 1px 1px rgba(255,255,255,0.08);
-            transition: 0.35s ease;
-            transform: perspective(900px) rotateX(1deg);
-        }
-
-        .search-box:focus-within {
-            border-color: var(--gold);
-            box-shadow:
-                0 18px 40px rgba(0,0,0,0.6),
-                0 0 25px rgba(212,175,55,0.18),
-                inset 0 1px 2px rgba(255,255,255,0.08);
-            transform: perspective(900px) rotateX(0deg) translateY(-2px);
-        }
-
-        .search-box input {
-            flex: 1;
-            border: none;
-            outline: none;
-            padding: 12px 15px;
-            font-size: 16px;
-            color: #f5e7bd;
-            background: transparent;
-        }
-
-        .search-box input::placeholder {
-            color: #888174;
-        }
-
-        /* PASTE BUTTON */
-        .paste-btn {
-            background: linear-gradient(145deg, #292929, #171717);
-            color: var(--gold-light);
-            border: 1px solid rgba(212,175,55,0.25);
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-right: 8px;
-            transition: 0.25s;
-            box-shadow: 0 4px 0 #080808, 0 5px 10px rgba(0,0,0,0.3);
-        }
-
-        .paste-btn:hover {
-            background: #3a301b;
-            border-color: var(--gold);
-            transform: translateY(-2px);
-        }
-
-        .paste-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 1px 0 #080808;
-        }
-
-        /* DOWNLOAD BUTTON */
-        .download-btn {
-            background: linear-gradient(135deg, #f1d27a, #b58b24, #8c6b18);
-            color: #0a0a0a;
-            border: 1px solid #f4d77e;
-            padding: 12px 24px;
-            border-radius: 9px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow:
-                0 4px 0 #725311,
-                0 7px 18px rgba(212,175,55,0.2);
-        }
-
-        .download-btn:hover {
-            filter: brightness(1.12);
-            transform: translateY(-3px);
-            box-shadow:
-                0 6px 0 #725311,
-                0 12px 25px rgba(212,175,55,0.28);
-        }
-
-        .download-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 1px 0 #725311;
-        }
-
-        /* RESULT AREA */
-        #result-area {
-            max-width: 650px;
-            width: 100%;
-            margin: 25px auto;
-            padding: 0 20px;
-            text-align: center;
-        }
-
-        .loader {
-            border: 4px solid #292929;
-            border-top: 4px solid var(--gold);
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            animation: spin 1s linear infinite;
-            margin: 15px auto;
-            box-shadow: 0 0 15px rgba(212,175,55,0.1);
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .result-card {
-            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
-            padding: 25px;
-            border-radius: 12px;
-            border: 1px solid rgba(212,175,55,0.25);
-            box-shadow:
-                0 12px 30px rgba(0,0,0,0.4),
-                inset 0 1px 0 rgba(255,255,255,0.04);
-            margin-top: 15px;
-        }
-
-        .final-dl-btn {
-            display: inline-block;
-            background: linear-gradient(135deg, #f1d27a, #b58b24);
-            color: #090909;
-            text-decoration: none;
-            padding: 14px 30px;
-            border-radius: 9px;
-            font-size: 18px;
-            font-weight: 700;
-            margin-top: 10px;
-            transition: 0.3s;
-            box-shadow:
-                0 4px 0 #725311,
-                0 8px 18px rgba(212,175,55,0.15);
-        }
-
-        .final-dl-btn:hover {
-            filter: brightness(1.1);
-            transform: translateY(-3px);
-        }
-
-        /* FEATURES */
-        .features {
-            max-width: 900px;
-            width: 100%;
-            margin: 40px auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .feature-card {
-            background: linear-gradient(145deg, #1b1b1b, #0d0d0d);
-            padding: 25px 20px;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid rgba(212,175,55,0.18);
-            box-shadow:
-                0 8px 0 #050505,
-                0 12px 22px rgba(0,0,0,0.4),
-                inset 0 1px 0 rgba(255,255,255,0.04);
-            transition: 0.35s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-7px) scale(1.015);
-            border-color: rgba(212,175,55,0.6);
-            box-shadow:
-                0 12px 0 #050505,
-                0 18px 30px rgba(212,175,55,0.08);
-        }
-
-        .feature-card h3 {
-            color: var(--gold-light);
-            margin-bottom: 8px;
-            font-size: 18px;
-            text-shadow: 0 0 10px rgba(212,175,55,0.12);
-        }
-
-        .feature-card p {
-            font-size: 14px;
-            color: #aaa49a;
-        }
-
-        /* FOOTER */
-        footer {
-            margin-top: auto;
-            background: linear-gradient(180deg, #131313, #080808);
-            color: #89847a;
-            text-align: center;
-            padding: 18px;
-            font-size: 14px;
-            border-top: 1px solid rgba(212,175,55,0.2);
-        }
-
-        footer span {
-            color: var(--gold);
-        }
-
-        /* MOBILE RESPONSIVE */
+        /* মোবাইল ডিভাইসের জন্য বিশেষ স্টাইল */
         @media (max-width: 600px) {
-            header {
-                padding: 15px 5%;
-            }
-
-            .search-box {
-                flex-direction: column;
-                gap: 8px;
-                padding: 12px;
-            }
-
-            .search-box input,
-            .download-btn,
-            .paste-btn {
-                width: 100%;
-            }
-
-            .paste-btn {
-                margin-right: 0;
-            }
-
-            .hero {
-                padding: 55px 18px;
-            }
-
-            .hero h1 {
-                font-size: 27px;
-            }
-
-            .hero p {
-                font-size: 14px;
-            }
+            header { padding: 12px 4%; }
+            .logo { font-size: 19px; gap: 6px; }
+            .logo-icon { width: 28px; height: 28px; }
+            .dev-badge { font-size: 11px; padding: 4px 10px; }
+            .hero { padding: 38px 14px 25px; }
+            .hero h1 { font-size: 25px; }
+            .hero p { font-size: 13.5px; margin-bottom: 22px; }
+            .search-box { flex-direction: column; padding: 10px; gap: 10px; }
+            .search-box input { width: 100%; background: #141414; border: 1px solid #2c2c2c; border-radius: 8px; padding: 13px 12px; text-align: center; }
+            .btn-actions { width: 100%; display: grid; grid-template-columns: 1fr 1.6fr; gap: 8px; }
+            .paste-btn, .download-btn { width: 100%; padding: 13px 10px; font-size: 15px; }
         }
     </style>
 </head>
-
 <body>
 
 <header>
-    <a href="#" class="logo">FBVideo<span>Down</span></a>
-    <span style="font-size: 14px; color: #aaa49a;">দ্রুত ও সহজ ভিডিও ডাউনলোডার</span>
+    <a href="#" class="logo">
+        <div class="logo-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+        </div>
+        <div>FBVideo<span>Down</span></div>
+    </a>
+    <div class="dev-badge">By <strong>Md Arafat Bhuiyan</strong></div>
 </header>
 
 <section class="hero">
-    <h1>অনলাইন ভিডিও ডাউনলোডার</h1>
-    <p>যেকোনো পাবলিক ভিডিওর লিংক পেস্ট করুন এবং মুহূর্তেই ডাউনলোড করুন</p>
-
+    <h1>Online Video Downloader</h1>
+    <p>Paste any public video link below and download it instantly</p>
+    
     <div class="search-box">
-        <input type="text" id="videoUrl" placeholder="ভিডিওর লিংক এখানে পেস্ট করুন...">
-        <button class="paste-btn" id="pasteBtn" onclick="handlePaste()">📋 Paste</button>
-        <button class="download-btn" onclick="fetchVideo()">ডাউনলোড</button>
+        <input type="text" id="videoUrl" placeholder="Paste video link here...">
+        <div class="btn-actions">
+            <button class="paste-btn" id="pasteBtn" onclick="handlePaste()">📋 Paste</button>
+            <button class="download-btn" onclick="fetchVideo()">Download</button>
+        </div>
     </div>
 </section>
 
@@ -381,28 +131,28 @@
 
 <section class="features">
     <div class="feature-card">
-        <h3>১. লিংক কপি করুন</h3>
-        <p>আপনার পছন্দের ভিডিওটির শেয়ার অপশন থেকে লিংকটি কপি করুন।</p>
+        <h3>1. Copy Video Link</h3>
+        <p>Click on the Share button of your desired video and copy the link.</p>
     </div>
     <div class="feature-card">
-        <h3>২. লিংক পেস্ট করুন</h3>
-        <p>ওপরের বক্সে লিংকটি পেস্ট করে ডাউনলোড বাটনে ক্লিক করুন।</p>
+        <h3>2. Paste the Link</h3>
+        <p>Paste the copied URL into the input box above and click Download.</p>
     </div>
     <div class="feature-card">
-        <h3>৩. ভিডিও সেভ করুন</h3>
-        <p>প্রসেসিং শেষ হলে সবুজ বাটনে ক্লিক করে সরাসরি MP4 সেভ করুন।</p>
+        <h3>3. Save Video</h3>
+        <p>Once processed, click the green button to save the MP4 file directly.</p>
     </div>
 </section>
 
 <footer>
-    &copy; 2026 FBVideoDown | শুধুমাত্র ব্যক্তিগত ও কপিরাইট-মুক্ত ব্যবহারের জন্য।
+    &copy; 2026 FBVideoDown | Developed by <strong>Md Arafat Bhuiyan</strong><br>
+    For personal and copyright-free use only.
 </footer>
 
 <script>
     const urlInput = document.getElementById('videoUrl');
     const pasteBtn = document.getElementById('pasteBtn');
 
-    // এক ক্লিকে পেস্ট বা ক্লিয়ার করার ফাংশন
     async function handlePaste() {
         if (urlInput.value.trim() !== "") {
             urlInput.value = "";
@@ -415,7 +165,7 @@
             urlInput.value = text;
             pasteBtn.innerText = "❌ Clear";
         } catch (err) {
-            alert("ব্রাউজার থেকে সরাসরি পেস্ট করতে পারমিশন দিন অথবা Ctrl+V চাপুন।");
+            alert("Tap inside the box and select Paste.");
         }
     }
 
@@ -426,37 +176,15 @@
     async function fetchVideo() {
         const url = urlInput.value.trim();
         const resultArea = document.getElementById('result-area');
-
+        
         if (!url) {
-            resultArea.innerHTML = "<div class='result-card' style='color:#e0b94f;'>দয়া করে একটি সঠিক ভিডিও লিংক দিন!</div>";
+            resultArea.innerHTML = "<div class='result-card' style='color:#ff6b6b;'>Please enter a valid video link!</div>";
             return;
         }
 
-        resultArea.innerHTML = "<div class='result-card'><div class='loader'></div><p>ভিডিও প্রসেস হচ্ছে, দয়া করে কয়েক সেকেন্ড অপেক্ষা করুন...</p></div>";
+        resultArea.innerHTML = "<div class='result-card'><div class='loader'></div><p style='color:#cccccc; font-size:14px;'>Processing video, please wait a moment...</p></div>";
 
         try {
             const response = await fetch('/get-video', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url: url })
-            });
-            const data = await response.json();
-
-            if (data.downloadUrl) {
-                resultArea.innerHTML = `
-                    <div class="result-card">
-                        <h3 style="color:#d4af37; margin-bottom:10px;">✅ ভিডিওটি ডাউনলোডের জন্য প্রস্তুত!</h3>
-                        <a href="${data.downloadUrl}" target="_blank" download class="final-dl-btn">⬇️ ভিডিও ডাউনলোড করুন (MP4)</a>
-                    </div>
-                `;
-            } else {
-                resultArea.innerHTML = `<div class='result-card' style='color:#e0b94f;'>❌ ${data.error || 'ভিডিওটি খুঁজে পাওয়া যায়নি।'}</div>`;
-            }
-        } catch (error) {
-            resultArea.innerHTML = "<div class='result-card' style='color:#e0b94f;'>❌ সার্ভারে সংযোগ পাওয়া যাচ্ছে না।</div>";
-        }
-    }
-</script>
-
-</body>
-</html>
