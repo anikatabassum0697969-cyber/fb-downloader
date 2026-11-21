@@ -11,22 +11,26 @@ app.post('/get-video', (req, res) => {
     try { 
         new URL(videoUrl); 
     } catch (_) {
-        return res.status(400).json({ error: 'সঠিক লিংক দিন' });
+        return res.status(400).json({ error: 'Please enter a valid Facebook URL.' });
     }
 
     const args = [
         '-g',
         '-f', 'best[ext=mp4]/best',
         '--no-playlist',
-        '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        '--no-check-certificates',
+        '--geo-bypass',
+        '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+        '--add-header', 'Accept-Language:en-US,en;q=0.9',
+        '--add-header', 'Sec-Fetch-Mode:navigate',
         videoUrl
     ];
 
     execFile('yt-dlp', args, (error, stdout, stderr) => {
-        if (error) {
+        if (error || !stdout.trim()) {
             console.error('yt-dlp Error:', stderr || error.message);
             return res.status(500).json({ 
-                error: 'ভিডিওটি প্রাইভেট অথবা সার্ভার থেকে ব্লক করা হয়েছে।' 
+                error: 'Could not fetch video. Make sure the video is Public or try again.' 
             });
         }
         
@@ -36,5 +40,5 @@ app.post('/get-video', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`সার্ভার চলছে পোর্ট ${PORT}-এ`);
+    console.log(`Server running on port ${PORT}`);
 });
