@@ -11,26 +11,19 @@
             canvas.width = 64;
             canvas.height = 64;
             const ctx = canvas.getContext('2d');
-            
             ctx.fillStyle = '#f5d061';
             ctx.beginPath();
             ctx.roundRect(0, 0, 64, 64, 14);
             ctx.fill();
-            
             ctx.strokeStyle = '#111111';
             ctx.lineWidth = 6;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             ctx.beginPath();
-            ctx.moveTo(32, 14);
-            ctx.lineTo(32, 40);
-            ctx.moveTo(21, 29);
-            ctx.lineTo(32, 40);
-            ctx.lineTo(43, 29);
-            ctx.moveTo(16, 49);
-            ctx.lineTo(48, 49);
+            ctx.moveTo(32, 14); ctx.lineTo(32, 40);
+            ctx.moveTo(21, 29); ctx.lineTo(32, 40); ctx.lineTo(43, 29);
+            ctx.moveTo(16, 49); ctx.lineTo(48, 49);
             ctx.stroke();
-            
             document.getElementById('dynamic-favicon').href = canvas.toDataURL('image/png');
         })();
     </script>
@@ -38,68 +31,43 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: #121212; color: #ffffff; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
-        
-        /* নেভিগেশন বার ও লোগো */
         header { background: #141414; padding: 14px 5%; border-bottom: 1px solid #262626; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-        .logo { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 700; color: #f5d061; text-decoration: none; letter-spacing: 0.3px; }
+        .logo { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 700; color: #f5d061; text-decoration: none; }
         .logo span { color: #ffffff; }
-        .logo-icon { width: 32px; height: 32px; flex-shrink: 0; background: linear-gradient(135deg, #f5d061 0%, #c59b27 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(245, 208, 97, 0.3); }
-        
-        /* উপরের নামের ব্যাজ */
+        .logo-icon { width: 32px; height: 32px; flex-shrink: 0; background: linear-gradient(135deg, #f5d061 0%, #c59b27 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
         .dev-badge { background: #1f1c14; border: 1px solid #4a3f1f; color: #cccccc; padding: 5px 12px; border-radius: 20px; font-size: 12px; white-space: nowrap; }
-        .dev-badge strong { color: #f5d061; font-weight: 600; }
-
-        /* হিরো সেকশন */
+        .dev-badge strong { color: #f5d061; }
         .hero { background: radial-gradient(circle at top center, #33270d 0%, #121212 75%); padding: 50px 16px 35px; text-align: center; }
-        .hero h1 { font-size: 34px; margin-bottom: 10px; font-weight: 700; color: #f5d061; line-height: 1.25; }
-        .hero p { font-size: 15px; color: #cccccc; margin-bottom: 28px; max-width: 500px; margin-left: auto; margin-right: auto; }
-
-        /* ইনপুট বক্স ও বাটন */
+        .hero h1 { font-size: 34px; margin-bottom: 10px; font-weight: 700; color: #f5d061; }
+        .hero p { font-size: 15px; color: #cccccc; margin-bottom: 28px; }
         .search-box { background: #1e1e1e; max-width: 660px; margin: 0 auto; padding: 8px; border-radius: 12px; border: 1px solid #3a321d; display: flex; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .search-box input { flex: 1; border: none; outline: none; padding: 12px 14px; font-size: 16px; color: #ffffff; background: transparent; min-width: 0; }
-        .search-box input::placeholder { color: #777777; font-size: 14px; }
         .btn-actions { display: flex; align-items: center; gap: 8px; }
-        .paste-btn { background: #2c2c2c; color: #ffffff; border: 1px solid #3d3d3d; padding: 11px 15px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; white-space: nowrap; }
-        .paste-btn:hover { background: #383838; }
-        .download-btn { background: linear-gradient(135deg, #e5c158 0%, #c59b27 100%); color: #111111; border: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; white-space: nowrap; }
-        .download-btn:hover { filter: brightness(1.1); }
-
-        /* রেজাল্ট ও লোডিং সেকশন */
+        .paste-btn { background: #2c2c2c; color: #ffffff; border: 1px solid #3d3d3d; padding: 11px 15px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .download-btn { background: linear-gradient(135deg, #e5c158 0%, #c59b27 100%); color: #111111; border: none; padding: 12px 24px; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; }
         #result-area { max-width: 660px; margin: 20px auto; padding: 0 16px; text-align: center; width: 100%; }
         .loader { border: 4px solid #2a2a2a; border-top: 4px solid #f5d061; border-radius: 50%; width: 36px; height: 36px; animation: spin 1s linear infinite; margin: 12px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .result-card { background: #1a1a1a; border: 1px solid #2e2e2e; padding: 22px 16px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
-        .final-dl-btn { display: inline-block; width: 100%; max-width: 300px; background: #28a745; color: #ffffff; text-decoration: none; padding: 14px 20px; border-radius: 8px; font-size: 16px; font-weight: 600; margin-top: 12px; transition: 0.3s; }
-        .final-dl-btn:hover { background: #218838; }
-
-        /* ফিচার কার্ড সেকশন */
+        .result-card { background: #1a1a1a; border: 1px solid #2e2e2e; padding: 22px 16px; border-radius: 12px; }
+        .final-dl-btn { display: inline-block; width: 100%; max-width: 300px; background: #28a745; color: #ffffff; text-decoration: none; padding: 14px 20px; border-radius: 8px; font-size: 16px; font-weight: 600; margin-top: 12px; }
         .features { max-width: 960px; margin: 25px auto 40px; padding: 0 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; width: 100%; }
         .feature-card { background: #181818; border: 1px solid #262626; padding: 20px 18px; border-radius: 12px; text-align: center; }
         .feature-card h3 { color: #f5d061; margin-bottom: 8px; font-size: 17px; }
         .feature-card p { font-size: 13.5px; color: #aaaaaa; line-height: 1.5; }
-
         footer { margin-top: auto; background: #0f0f0f; border-top: 1px solid #222222; color: #888888; text-align: center; padding: 16px 12px; font-size: 12.5px; line-height: 1.6; }
-        footer strong { color: #f5d061; font-weight: 600; }
-
-        /* মোবাইল ডিভাইসের জন্য বিশেষ স্টাইল */
+        footer strong { color: #f5d061; }
         @media (max-width: 600px) {
             header { padding: 12px 4%; }
-            .logo { font-size: 19px; gap: 6px; }
-            .logo-icon { width: 28px; height: 28px; }
-            .dev-badge { font-size: 11px; padding: 4px 10px; }
-            .hero { padding: 38px 14px 25px; }
+            .logo { font-size: 19px; }
             .hero h1 { font-size: 25px; }
-            .hero p { font-size: 13.5px; margin-bottom: 22px; }
             .search-box { flex-direction: column; padding: 10px; gap: 10px; }
-            .search-box input { width: 100%; background: #141414; border: 1px solid #2c2c2c; border-radius: 8px; padding: 13px 12px; text-align: center; }
+            .search-box input { width: 100%; background: #141414; border: 1px solid #2c2c2c; border-radius: 8px; text-align: center; }
             .btn-actions { width: 100%; display: grid; grid-template-columns: 1fr 1.6fr; gap: 8px; }
-            .paste-btn, .download-btn { width: 100%; padding: 13px 10px; font-size: 15px; }
+            .paste-btn, .download-btn { width: 100%; }
         }
     </style>
 </head>
 <body>
-
 <header>
     <a href="#" class="logo">
         <div class="logo-icon">
@@ -113,22 +81,18 @@
     </a>
     <div class="dev-badge">By <strong>Md Arafat Bhuiyan</strong></div>
 </header>
-
 <section class="hero">
     <h1>Online Video Downloader</h1>
     <p>Paste any public video link below and download it instantly</p>
-    
     <div class="search-box">
         <input type="text" id="videoUrl" placeholder="Paste video link here...">
         <div class="btn-actions">
-            <button class="paste-btn" id="pasteBtn" onclick="handlePaste()">📋 Paste</button>
-            <button class="download-btn" onclick="fetchVideo()">Download</button>
+            <button type="button" class="paste-btn" id="pasteBtn">📋 Paste</button>
+            <button type="button" class="download-btn" id="dlBtn">Download</button>
         </div>
     </div>
 </section>
-
 <div id="result-area"></div>
-
 <section class="features">
     <div class="feature-card">
         <h3>1. Copy Video Link</h3>
@@ -143,21 +107,21 @@
         <p>Once processed, click the green button to save the MP4 file directly.</p>
     </div>
 </section>
-
 <footer>
     &copy; 2026 FBVideoDown | Developed by <strong>Md Arafat Bhuiyan</strong><br>
     For personal and copyright-free use only.
 </footer>
-
 <script>
     const urlInput = document.getElementById('videoUrl');
     const pasteBtn = document.getElementById('pasteBtn');
+    const dlBtn = document.getElementById('dlBtn');
+    const resultArea = document.getElementById('result-area');
 
-    async function handlePaste() {
+    pasteBtn.addEventListener('click', async () => {
         if (urlInput.value.trim() !== "") {
             urlInput.value = "";
             pasteBtn.innerText = "📋 Paste";
-            document.getElementById('result-area').innerHTML = "";
+            resultArea.innerHTML = "";
             return;
         }
         try {
@@ -165,26 +129,48 @@
             urlInput.value = text;
             pasteBtn.innerText = "❌ Clear";
         } catch (err) {
-            alert("Tap inside the box and select Paste.");
+            urlInput.focus();
+            alert("Browser blocked auto-paste. Please press Ctrl+V inside the box.");
         }
-    }
+    });
 
     urlInput.addEventListener('input', () => {
         pasteBtn.innerText = urlInput.value.trim() !== "" ? "❌ Clear" : "📋 Paste";
     });
 
-    async function fetchVideo() {
+    dlBtn.addEventListener('click', async () => {
         const url = urlInput.value.trim();
-        const resultArea = document.getElementById('result-area');
-        
         if (!url) {
             resultArea.innerHTML = "<div class='result-card' style='color:#ff6b6b;'>Please enter a valid video link!</div>";
             return;
         }
-
-        resultArea.innerHTML = "<div class='result-card'><div class='loader'></div><p style='color:#cccccc; font-size:14px;'>Processing video, please wait a moment...</p></div>";
+        dlBtn.innerText = "Wait...";
+        dlBtn.disabled = true;
+        resultArea.innerHTML = "<div class='result-card'><div class='loader'></div><p style='color:#cccccc; font-size:14px;'>Processing video, please wait...</p></div>";
 
         try {
             const response = await fetch('/get-video', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: url })
+            });
+            const data = await response.json();
+            if (data.downloadUrl) {
+                resultArea.innerHTML = `
+                    <div class="result-card">
+                        <h3 style="color:#4cd137; margin-bottom:8px; font-size:18px;">✅ Your video is ready!</h3>
+                        <a href="${data.downloadUrl}" target="_blank" download class="final-dl-btn">⬇️ Download Video (MP4)</a>
+                    </div>`;
+            } else {
+                resultArea.innerHTML = `<div class='result-card' style='color:#ff6b6b;'>❌ ${data.error || 'Video not found or private.'}</div>`;
+            }
+        } catch (error) {
+            resultArea.innerHTML = "<div class='result-card' style='color:#ff6b6b;'>❌ Server connection failed. Please try again.</div>";
+        } finally {
+            dlBtn.innerText = "Download";
+            dlBtn.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>
